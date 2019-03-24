@@ -13,4 +13,12 @@ url ='static/img/camgiang.jpg'
 #khai báo 1 biến tên là show là đối tượng của class PhysthonImage truyền vào tham số là (url)
 show = PhysthonImage(url)
 show.open()
+show.to_gray()
+show.show_of()
+
+show.changeColor(1000,2000,3000)
+show.show_of()
+
 show.rotate(45)
+
+show.save_img('static/img/image_save.jpg')

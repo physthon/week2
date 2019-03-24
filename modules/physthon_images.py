@@ -2,6 +2,7 @@ from pylab import *
 from PIL import Image
 import numpy as np
 
+
 class PhysthonImage:
     # Khi được truyền tham số là url thì hàm khởi tạo __init__ sẽ tạo ra 1 biến nằm trong phạm vi xử lý
     # của class PhysthonImage là self.url
@@ -12,6 +13,7 @@ class PhysthonImage:
         self.image_convert = ""
         self.image_original = ""
     # Phương thức open là bắt buộc phải gọi ra trước khi thực hiện các phương thức phía dưới
+
     def open(self):
         self.image_original = Image.open(self.url)
         return "Mở ảnh thành công"
@@ -19,9 +21,10 @@ class PhysthonImage:
     # Phương thức này giúp show ra hình ảnh truyền vào dưới dạng màu trắng đen
     def to_gray(self):
         self.image_convert = self.image_original
-        self.image_convert = self.image_convert.Convert('L')
-        self.image_convert = array(self.image_convert)
+        self.image_convert = array(self.image_convert.convert('L'))
+        gray()
         imshow(self.image_convert)
+
     def show_of(self):
         if(type(self.image_convert) != 'list'):
             show()
@@ -38,25 +41,26 @@ class PhysthonImage:
 	    G = G/1000
 	    B = B/1000
         # Khai báo 1 ma trận màu sắc mặc định truyền vào cho hình ảnh chỉnh sửa
-	    rgb = (R, 1.5*R, 0.5*R, 0,
+	    rgb_matrix = (R, 1.5*R, 0.5*R, 0,
    		       G, 1.5*G, 0.5*G, 0,
 		       B, 1.5*B, 0.5*B, 0,)
 	    self.image_convert = self.image_original
-	    self.image_convert = self.image_convert.Convert('rgb', rgb)
-	    self.image_convert = array(self.image_convert)
+	    self.image_convert = array(self.image_convert.convert('RGB', rgb_matrix));imshow(self.image_convert)
 
+    # Phương thức xoay tìm điểm xoay ảnh
     def findOriginalPixel(self, angle, rowIndex, colIndex, centerX, centerY):
         x0 = np.cos(angle)*(colIndex - centerX) - np.sin(angle)*(rowIndex - centerY) + centerX
         y0 = np.sin(angle)*(colIndex - centerX) + np.cos(angle)*(rowIndex - centerY) + centerY
         return x0, y0
-    # Phương thức xoay tìm điểm xoay ảnh
+    # Tiền xử lý trước khi xoay ảnh
     def pre_rotate(self,angle):
+        # Do chưa tìm ra cách xoay ảnh màu nên mình convert sang ảnh trắng đen để xử lý
         img = array(self.image_original.convert('L'))
         gray()
         row, col = img.shape
         angle = -angle
-        rowOut = row + 500
-        colOut = col + 500
+        rowOut = row + 500 # + Thêm phần mở rộng cho ảnh khi xoay bị mất góc
+        colOut = col + 500 # + Tương tự
         centerX = np.round(col/2)
         centerY = np.round(row/2)
         # index = np.around(img)
@@ -75,7 +79,13 @@ class PhysthonImage:
                 imgOut[y0+250,x0+250] = img[i,j]
         return imgOut
     
+    # Phương thức xoay ảnh và xuất ảnh ra ngoài
     def rotate(self,angle):
         self.image_convert = self.pre_rotate(angle)
         imshow(self.image_convert)
         show()
+
+    # Lưu ảnh. Sẽ lưu lại ảnh được convert sau cùng
+    def save_img(self,url):
+        im = Image.fromarray(self.image_convert)
+        im.save(url)
