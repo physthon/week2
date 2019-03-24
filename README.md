@@ -30,3 +30,5 @@ class ToiHocPython,class BaiTapVeNha
 
 ## **Lưu ý quan trọng trong tất cả các folder có chứa file .py . Ta luôn phải tạo 1 file có tên là __init__.py trong từng folder mà có file .py hiện hành. Điều này sẽ giúp ta có thể import file từ folder này sang folder khác.
 
+# Các nội dung khác sẽ được đề cập dựa trên source làm việc.
+
